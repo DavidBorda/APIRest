@@ -38,6 +38,7 @@ fastify.get("/usuarios/:id", async (request, reply) => {
 fastify.post("/usuarios", async (request, reply) => {
   try {
     // Extraer los datos del cuerpo de la solicitud
+        console.log("Body recibido:", request.body);
     const { nombre, contacto, vehiculo } = request.body;
 
     // Insertar el usuario en la base de datos
