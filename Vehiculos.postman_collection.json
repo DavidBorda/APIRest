@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "96f70a3d-7709-4599-8973-ffbf0625b21d",
+		"name": "Vehiculos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34867183"
+	},
+	"item": [
+		{
+			"name": "obtener",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/vehiculos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vehiculos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "obtenerID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/vehiculos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vehiculos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "nuevovehiculo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"usuarioId\": 1,\r\n  \"placa\": \"ABC128\",\r\n  \"marca\": \"Yamaha\",\r\n  \"modelo\": \"MT\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/vehiculos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vehiculos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actualizarvehiculo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n  \"usuarioId\": 1,\r\n  \"placa\": \"ABC129\",\r\n  \"marca\": \"Nissan\",\r\n  \"modelo\": \"GTR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/vehiculos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vehiculos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "eliminarvehiculo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/vehiculos/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vehiculos",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
