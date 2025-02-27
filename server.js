@@ -2,145 +2,179 @@ require('dotenv').config();
 const fastify = require('fastify')({ logger: true });
 const db = require('./db');
 
-// Rutas
-fastify.get('/usuarios', async (request, reply) => {
-    try {
-        const users = await db.any('SELECT * FROM usuarios'); // Correcto
-        reply.send(users); 
-    } catch (error) {
-        reply.status(500).send({ error: 'Error obteniendo usuarios', detalle: error.message });
-    }
+// Rutas para la tabla usuarios
+
+const { Usuario } = require("./models"); // Importamos el modelo
+
+fastify.get("/usuarios", async (request, reply) => {
+  try {
+    console.log("GET /usuarios ejecutado"); // Log de depuración
+    const usuarios = await Usuario.findAll();
+    console.log("Usuarios obtenidos:", usuarios); // Verifica si realmente obtiene usuarios
+    reply.send(usuarios);
+  } catch (error) {
+    console.error("Error en GET /usuarios:", error);
+    reply.status(500).send({ error: "Error al obtener usuarios", detalle: error.message });
+  }
 });
 
-fastify.post('/usuarios', async (request, reply) => {
+fastify.get("/usuarios/:id", async (request, reply) => {
+  try {
+    const { id } = request.params;
+    const usuario = await Usuario.findByPk(id);
+
+    if (!usuario) {
+      return reply.status(404).send({ error: "Usuario no encontrado" });
+    }
+
+    reply.send(usuario);
+  } catch (error) {
+    reply.status(500).send({ error: "Error al obtener el usuario", detalle: error.message });
+  }
+});
+
+
+
+fastify.post("/usuarios", async (request, reply) => {
+  try {
+    // Extraer los datos del cuerpo de la solicitud
     const { nombre, contacto, vehiculo } = request.body;
-    try {
-        const newUser = await db.one(
-            'INSERT INTO usuarios(nombre, contacto, vehiculo) VALUES($1, $2, $3) RETURNING *',
-            [nombre, contacto, vehiculo]
-        );
-        reply.send(newUser);
-    } catch (error) {
-        reply.status(500).send({ error: 'Error insertando usuario', detalle: error.message });
-    }
+
+    // Insertar el usuario en la base de datos
+    const nuevoUsuario = await Usuario.create({ nombre, contacto, vehiculo });
+
+    reply.status(201).send(nuevoUsuario); // Responder con el usuario creado
+  } catch (error) {
+    reply.status(500).send({ error: "Error al insertar usuario", detalle: error.message });
+  }
 });
 
-fastify.put('/usuarios/:id', async (request, reply) => {  
+
+fastify.put("/usuarios/:id", async (request, reply) => {
+  try {
     const { id } = request.params;
     const { nombre, contacto, vehiculo } = request.body;
 
-    try {
-        // Obtener el usuario
-        const user = await db.oneOrNone('SELECT * FROM usuarios WHERE id = $1', [id]);
-        if (!user) {
-            return reply.status(404).send({ error: 'Usuario no encontrado' });
-        }
-
-        // Actualizar usuario con valores nuevos o mantener los anteriores
-        await db.none(
-            'UPDATE usuarios SET nombre=$1, contacto=$2, vehiculo=$3 WHERE id=$4',  
-            [nombre || user.nombre, contacto || user.contacto, vehiculo || user.vehiculo, id]  
-        );
-
-        reply.send({ mensaje: 'Usuario actualizado correctamente' });
-    } catch (error) {
-        reply.status(500).send({ error: 'Error al actualizar el usuario', detalle: error.message });
+    const usuario = await Usuario.findByPk(id);
+    if (!usuario) {
+      return reply.status(404).send({ error: "Usuario no encontrado" });
     }
+
+    await usuario.update({ nombre, contacto, vehiculo });
+
+    reply.send(usuario);
+  } catch (error) {
+    reply.status(500).send({ error: "Error al actualizar usuario", detalle: error.message });
+  }
 });
 
-fastify.delete('/usuarios/:id', async (request, reply) => {
+fastify.delete("/usuarios/:id", async (request, reply) => {
+  try {
     const { id } = request.params;
+    const usuario = await Usuario.findByPk(id);
 
-    try {
-        // Verificar si el usuario existe
-        const user = await db.oneOrNone('SELECT * FROM usuarios WHERE id = $1', [id]);
-        if (!user) {
-            return reply.status(404).send({ error: 'Usuario no encontrado' });
-        }
-
-        // Eliminar usuario
-        await db.none('DELETE FROM usuarios WHERE id = $1', [id]);
-
-        reply.send({ mensaje: 'Usuario eliminado correctamente' });
-    } catch (error) {
-        reply.status(500).send({ error: 'Error al eliminar el usuario', detalle: error.message });
+    if (!usuario) {
+      return reply.status(404).send({ error: "Usuario no encontrado" });
     }
+
+    await usuario.destroy();
+
+    reply.send({ mensaje: "Usuario eliminado correctamente" });
+  } catch (error) {
+    reply.status(500).send({ error: "Error al eliminar usuario", detalle: error.message });
+  }
 });
 
 // endpoint para la segunda tabla ------------------------------------------
-fastify.get('/vehiculos', async (request, reply) => {
-    try {
-        const vehiculos = await db.any('SELECT * FROM vehiculos');
-        reply.send(vehiculos);
-    } catch (error) {
-        reply.status(500).send({ error: 'Error al obtener los vehículos', detalle: error.message });
-    }
+const { Vehiculo } = require("./models"); // Importamos el modelo
+fastify.get("/vehiculos", async (request, reply) => {
+  try {
+    const vehiculos = await Vehiculo.findAll();
+    reply.send(vehiculos);
+  } catch (error) {
+    reply.status(500).send({ error: "Error al obtener vehículos", detalle: error.message });
+  }
 });
 
-fastify.get('/usuarios/:id/vehiculos', async (request, reply) => {
-    try {
-        const { id } = request.params;
-        const vehiculos = await db.any('SELECT * FROM vehiculos WHERE usuario_id = $1', [id]);
-        reply.send(vehiculos);
-    } catch (error) {
-        reply.status(500).send({ error: 'Error al obtener los vehículos del usuario', detalle: error.message });
+fastify.get("/vehiculos/:id", async (request, reply) => {
+  try {
+    const { id } = request.params;
+    const vehiculo = await Vehiculo.findByPk(id);
+
+    if (!vehiculo) {
+      return reply.status(404).send({ error: "Vehículo no encontrado" });
     }
+
+    reply.send(vehiculo);
+  } catch (error) {
+    reply.status(500).send({ error: "Error al obtener el vehículo", detalle: error.message });
+  }
 });
 
-fastify.post('/vehiculos', async (request, reply) => {
-    try {
-        const { usuario_id, placa, marca, modelo } = request.body;
-        const nuevoVehiculo = await db.one(
-            'INSERT INTO vehiculos(usuario_id, placa, marca, modelo) VALUES($1, $2, $3, $4) RETURNING *',
-            [usuario_id, placa, marca, modelo]
-        );
-        reply.send(nuevoVehiculo);
-    } catch (error) {
-        reply.status(500).send({ error: 'Error al registrar el vehículo', detalle: error.message });
+fastify.post("/vehiculos", async (request, reply) => {
+  try {
+    console.log("Datos recibidos:", request.body); // 🔍 Verifica lo que llega
+
+    const { usuarioId, placa, marca, modelo } = request.body;
+
+    if (!usuarioId || !marca) {
+      return reply.status(400).send({ error: "usuarioId y marca son obligatorios" });
     }
+
+    const usuario = await Usuario.findByPk(usuarioId);
+    if (!usuario) {
+      return reply.status(404).send({ error: "Usuario no encontrado" });
+    }
+
+    const nuevoVehiculo = await Vehiculo.create({ usuarioId, placa, marca, modelo });
+
+    reply.status(201).send(nuevoVehiculo);
+  } catch (error) {
+    reply.status(500).send({ error: "Error al insertar vehículo", detalle: error.message });
+  }
 });
 
-fastify.put('/vehiculos/:id', async (request, reply) => {
-    try {
-        const { id } = request.params;
-        const { placa, marca, modelo } = request.body;
-        const vehiculoActualizado = await db.one(
-            'UPDATE vehiculos SET placa=$1, marca=$2, modelo=$3 WHERE id=$4 RETURNING *',
-            [placa, marca, modelo, id]
-        );
-        reply.send(vehiculoActualizado);
-    } catch (error) {
-        reply.status(500).send({ error: 'Error al actualizar el vehículo', detalle: error.message });
+fastify.put("/vehiculos/:id", async (request, reply) => {
+  try {
+    const { id } = request.params;
+    const { placa, modelo, color, usuarioId } = request.body;
+
+    const vehiculo = await Vehiculo.findByPk(id);
+    if (!vehiculo) {
+      return reply.status(404).send({ error: "Vehículo no encontrado" });
     }
-});
 
-fastify.delete('/vehiculos/:id', async (request, reply) => {
-    try {
-        const { id } = request.params; // Extrae el ID desde la URL
+    await vehiculo.update({ placa, modelo, color, usuarioId });
 
-        if (!id) {
-            return reply.status(400).send({ error: 'Debes proporcionar un ID válido' });
-        }
-
-        const result = await db.result('DELETE FROM vehiculos WHERE id = $1', [id]);
-
-        if (result.rowCount === 0) {
-            return reply.status(404).send({ error: 'Vehículo no encontrado' });
-        }
-
-        reply.send({ message: 'Vehículo eliminado correctamente' });
-    } catch (error) {
-        reply.status(500).send({ error: 'Error al eliminar el vehículo', detalle: error.message });
-    }
+    reply.send(vehiculo);
+  } catch (error) {
+    reply.status(500).send({ error: "Error al actualizar vehículo", detalle: error.message });
+  }
 });
 
 
+fastify.delete("/vehiculos/:id", async (request, reply) => {
+  try {
+    const { id } = request.params;
+    const vehiculo = await Vehiculo.findByPk(id);
+
+    if (!vehiculo) {
+      return reply.status(404).send({ error: "Vehículo no encontrado" });
+    }
+
+    await vehiculo.destroy();
+
+    reply.send({ mensaje: "Vehículo eliminado correctamente" });
+  } catch (error) {
+    reply.status(500).send({ error: "Error al eliminar vehículo", detalle: error.message });
+  }
+});
 
 
 // Iniciar servidor
 const start = async () => {
     try {
-        await fastify.listen({ port: 3000 });
+        await fastify.listen({ port: 3000, host: '0.0.0.0' });
         console.log('Servidor corriendo en http://localhost:3000');
     } catch (err) {
         fastify.log.error(err);
@@ -150,7 +184,7 @@ const start = async () => {
 
 fastify.get('/test-db', async (request, reply) => {
   try {
-    const result = await db.any("SELECT * FROM public.usuarios");
+    const result = await db.any('SELECT * FROM public."Usuarios"');
     reply.send(result);
   } catch (error) {
     reply.status(500).send({ error: 'Error consultando la base de datos', detalle: error.message });
