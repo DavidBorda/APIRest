@@ -56,5 +56,17 @@ Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman
 
 8. Accede a la API en http://localhost:3000.
 
+## Requisitos
+**Uso con Docker (Local)**
+1. Tener Docker instalado.
+2. En la raíz del proyecto, ejecutar:
+   ```bash
+   docker-compose up --build
+Docker levantará:
+Un contenedor para PostgreSQL
+Un contenedor para la API
+La API estará disponible en http://localhost:3000.
+
+
 
 
