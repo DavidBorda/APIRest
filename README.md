@@ -1,7 +1,5 @@
 # APIRest
 
-# APIRest
-
 Microservicio API REST creado con **Node.js**, **Fastify**, **PostgreSQL** y **Docker**.  
 Desplegado en la nube con **Railway**.
 
@@ -40,3 +38,17 @@ Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman
    ```bash
    git clone
    cd APIRest
+
+2 Instala dependencias:
+   ```bash
+   npm install
+3. Crea el archivo .env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=postgres
+   DB_PASSWORD=123
+   DB_NAME=API
+4. Inicia el servidor localmente:
+   ```bash
+   npm run start
+5. Accede a la API en http://localhost:3000.
