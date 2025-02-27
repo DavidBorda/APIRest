@@ -64,8 +64,42 @@ Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman
    docker-compose up --build
 Docker levantará:
 Un contenedor para PostgreSQL
+
 Un contenedor para la API
 La API estará disponible en http://localhost:3000.
+
+## Despliegue en Railway
+- 1.Subir el repositorio a GitHub.
+- 2. En Railway, crea un New Project y selecciona tu repo.
+- 3. Configura las variables de entorno (por ejemplo, DATABASE_URL) con la URL que te da Railway para PostgreSQL.
+- 4. Ajusta el Start Command si necesitas correr migraciones antes de arrancar (npm run migrate && npm run start).
+- 5. Railway generará una URL pública (algo como https://apirest-production-xxxx.up.railway.app) para tu API.
+
+## Endpoints Principales
+| Método |	Ruta        |	Descripción                  |
+|--------|--------------|---------------------------------
+|GET	   | /usuarios    |Retorna la lista de usuarios   |
+|POST	   |/usuarios	   |Crea un nuevo usuario          | 
+|GET	   |/usuarios/:id |Retorna un usuario por ID      |
+|PUT	   |/usuarios/:id |Actualiza un usuario           |
+|DELETE	|/usuarios/:id |Elimina un usuario             |
+|GET	   |/vehiculos	   |Retorna la lista de vehículos  | 
+|POST	   |/vehiculos	   |Crea un nuevo vehículo         |
+|GET	   |/vehiculos/:id|Retorna un vehículo por ID     |
+|PUT	   |/vehiculos/:id|Actualiza un vehículo          |
+|DELETE	|/vehiculos/:id|Elimina un vehículo            | 
+
+## Postman
+Importa la colección en Postman para probar los endpoints (GET, POST, PUT, DELETE).
+## Autor
+- **David Borda** - Desarrollador del Proyecto
+
+## Despligue RailWay
+La API se encuentra desplegada en Railway se puede acceder desde:
+ ```bash
+https://apirest-production-d046.up.railway.app/usuarios
+
+
 
 
 
