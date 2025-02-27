@@ -178,7 +178,7 @@ const start = async () => {
         console.log('Servidor corriendo en http://localhost:3000');
     } catch (err) {
         fastify.log.error(err);
-        process.exit(1);
+
     }
 };
 
