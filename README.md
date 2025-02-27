@@ -38,8 +38,7 @@ Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman
    git clone https://github.com/TuUsuario/APIRest.git
    cd APIRest
 
-2 Instala dependencias:
-   ```bash
+2. Instala dependencias:
    npm install
 
 3. Crea el archivo .env
@@ -50,7 +49,6 @@ Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman
    DB_NAME=API
 
 4. Inicia el servidor localmente:
-   ```bash
    npm run start
 
 5. Accede a la API en http://localhost:3000.
