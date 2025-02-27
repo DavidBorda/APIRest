@@ -182,13 +182,4 @@ const start = async () => {
     }
 };
 
-fastify.get('/test-db', async (request, reply) => {
-  try {
-    const result = await db.any('SELECT * FROM public."Usuarios"');
-    reply.send(result);
-  } catch (error) {
-    reply.status(500).send({ error: 'Error consultando la base de datos', detalle: error.message });
-  }
-});
-
 start();
