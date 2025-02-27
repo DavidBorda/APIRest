@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node server.js",
-    "migrate": "sequelize-cli db:migrate"
+    "migrate": "sequelize-cli db:migrate",
+    "start:prod": "npm run migrate && npm run start"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
