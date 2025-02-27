@@ -6,16 +6,15 @@ Desplegado en la nube con **Railway**.
 ## Descripción
 
 Este proyecto es un microservicio que expone endpoints REST para gestionar usuarios y vehículos.  
-Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman, y configuración para Docker.
+Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman y configuración para Docker y Railway.
 
 ## Características
 
-- **Node.js (Fastify)** para crear la API.
+- **Node.js (Fastify)** para crear la API REST.
 - **PostgreSQL** como base de datos.
 - **Docker** para contenedores (localmente).
 - **Railway** para despliegue en la nube.
-- Endpoints REST (GET, POST, PUT, DELETE).
-- Manejador de rutas y lógica en `server.js`.
+- Endpoints REST (GET, POST, PUT, DELETE) para `usuarios` y `vehiculos`.
 
 ## Tecnologías
 
@@ -29,14 +28,14 @@ Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman
 
 1. **Node.js** v18 o superior
 2. **Docker** (opcional para entorno local)
-3. **Postman** (para pruebas de endpoints)
-4. **Git** (para clonar el repositorio)
+3. **Git** (para clonar el repositorio)
+4. **Postman** (para probar los endpoints)
 
 ## Instalación y Uso (Local)
 
-1. Clona el repositorio:
+1. **Clonar el repositorio**:
    ```bash
-   git clone
+   git clone https://github.com/TuUsuario/APIRest.git
    cd APIRest
 
 2 Instala dependencias:
@@ -55,3 +54,6 @@ Incluye un sistema de base de datos relacional (PostgreSQL), pruebas con Postman
    npm run start
 
 5. Accede a la API en http://localhost:3000.
+
+
+
